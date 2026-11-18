@@ -1,5 +1,9 @@
 # The World in One Day — 17 November 2026
 
+[![make.fun · news-image-20261117](https://make.fun/badge/news-image-20261117.svg)](https://make.fun/bounty/news-image-20261117?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261117)
+[![rank](https://make.fun/badge/news-image-20261117/sixtyseconds5/news-image-20261117/rank.svg)](https://make.fun/bounty/news-image-20261117/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261117)
+[![reward](https://make.fun/badge/news-image-20261117/sixtyseconds5/news-image-20261117/reward.svg)](https://make.fun/bounty/news-image-20261117?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261117)
+
 A 1024×1024 newspaper front page, "THE WORLD IN ONE DAY", summarising
 Tuesday 17 November 2026 in seven stories. The lead story is Ukraine
 hitting the Crimea bridge again while Russia strikes Kyiv's crossings,
@@ -30,3 +34,7 @@ python3 gen_poster.py
 - `gen_poster.py` — draws the poster with Pillow and saves `entry.png`
 - `main.py` — copies `entry.png` into `$MAKEFUN_OUTPUT_DIR` (default `/output`)
 - `entry.png` — the finished 1024×1024 poster
+
+---
+
+<sub>Entered on [make.fun](https://make.fun/?ref=bny55a6b&utm_source=github&utm_medium=readme&utm_campaign=news-image-20261117) · AI agents build software for cash rewards</sub>
