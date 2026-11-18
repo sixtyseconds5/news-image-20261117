@@ -1,7 +1,12 @@
 """Draw the 17 November 2026 world-news poster (1024x1024 PNG).
 
-Every story below is a real event reported on Tuesday 17 November 2026
-(sources: Al Jazeera, Reuters, AP, NPR, Just Security, Zark News).
+Every story below is a real event reported on Tuesday 17 November 2026,
+verified 18 Nov against: Reuters (Kerch bridge, Kyiv bridges, summit,
+Rwanda hub, UK sanctions), AP via NPR (Kerch), IRGC/Bahrain Defence Force
+via Reuters/TBS (Bahrain drones), Kyodo via Reuters (Japan airspace),
+The Hill / Pentagon Inspector General (audit), US Commerce Dept BIS /
+Reuters (AI-chip rule), France 24 / AP (Geneva killer-robots talks),
+gov.uk (UK sanctions), PAHO / CDC via NEJM Evidence (measles).
 The image is rendered once, locally, and committed as entry.png; main.py
 only copies it to the grader's output directory.
 """
@@ -44,8 +49,8 @@ def wrap(draw, text, fnt, width):
 
 
 def draw_text_block(draw, x, y, width, kicker, headline, deck,
-                    kicker_size=17, head_size=25, deck_size=19,
-                    head_font=SERIF_B, max_head_lines=3, max_deck_lines=4):
+                    kicker_size=17, head_size=25, deck_size=20,
+                    head_font=SERIF_B, max_head_lines=3, max_deck_lines=2):
     """Kicker + headline + deck; returns the y below the block."""
     kf, hf, df = font(SANS_B, kicker_size), font(head_font, head_size), font(SANS, deck_size)
     draw.text((x, y), kicker, font=kf, fill=RED)
@@ -63,8 +68,14 @@ def draw_text_block(draw, x, y, width, kicker, headline, deck,
 # ---------- small flat illustrations ----------
 
 def ill_bridge(d, x, y, w, h):
-    """Kerch bridge over the strait, blast plume on the deck."""
+    """Kerch bridge over the strait, road arch collapsed into the water."""
     d.rectangle([x, y, x + w, y + h], fill=(173, 205, 224))
+    # sun and clouds
+    d.ellipse([x + 18, y + 14, x + 58, y + 54], fill=(250, 210, 110))
+    for cx, cy in ((x + 120, y + 26), (x + 330, y + 18)):
+        d.ellipse([cx - 30, cy - 8, cx + 30, cy + 10], fill=(240, 244, 248))
+        d.ellipse([cx - 16, cy - 16, cx + 16, cy + 6], fill=(240, 244, 248))
+    # strait
     d.rectangle([x, y + int(h * 0.62), x + w, y + h], fill=(38, 84, 124))
     d.rectangle([x, y + int(h * 0.62), x + w, y + int(h * 0.66)], fill=(120, 165, 195))
     # towers and cables
@@ -72,14 +83,31 @@ def ill_bridge(d, x, y, w, h):
         d.rectangle([tx - 5, y + int(h * 0.18), tx + 5, y + int(h * 0.62)], fill=(70, 78, 90))
         d.line([tx, y + int(h * 0.18), x + 8, y + int(h * 0.60)], fill=(70, 78, 90), width=2)
         d.line([tx, y + int(h * 0.18), x + w - 8, y + int(h * 0.60)], fill=(70, 78, 90), width=2)
-    d.rectangle([x, y + int(h * 0.56), x + w, y + int(h * 0.62)], fill=(52, 58, 68))
+    # deck, broken at the blast: left span intact, right span stops short
+    d.rectangle([x, y + int(h * 0.56), x + int(w * 0.46), y + int(h * 0.62)], fill=(52, 58, 68))
+    d.rectangle([x + int(w * 0.60), y + int(h * 0.56), x + w, y + int(h * 0.62)], fill=(52, 58, 68))
+    # fallen arch segment, tilted into the strait, with splash
+    d.polygon([(x + int(w * 0.46), y + int(h * 0.62)),
+               (x + int(w * 0.60), y + int(h * 0.60)),
+               (x + int(w * 0.66), y + int(h * 0.82)),
+               (x + int(w * 0.50), y + int(h * 0.84))], fill=(52, 58, 68))
+    for sx, sy, r in ((x + int(w * 0.47), y + int(h * 0.80), 10),
+                      (x + int(w * 0.65), y + int(h * 0.82), 12),
+                      (x + int(w * 0.56), y + int(h * 0.88), 8)):
+        d.arc([sx - r, sy - r, sx + r, sy + r], 180, 360, fill=(220, 235, 245), width=3)
     # blast plume
     cx, cy = x + int(w * 0.52), y + int(h * 0.34)
     for r, col in ((46, (232, 116, 39)), (34, (240, 160, 60)), (22, (250, 210, 110))):
         d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=col)
     for dx, dy in ((-58, 26), (52, 34), (-30, -30), (64, -6)):
         d.ellipse([cx + dx - 7, cy + dy - 7, cx + dx + 7, cy + dy + 7], fill=(120, 120, 120))
-    # small boat
+    # drifting smoke
+    for dx, dy, r in ((-96, -18, 10), (-118, -4, 8), (96, -28, 9)):
+        d.ellipse([cx + dx - r, cy + dy - r, cx + dx + r, cy + dy + r], fill=(150, 150, 150))
+    # waves and a small boat held back from the gap
+    for wy in (y + h - 40, y + h - 28):
+        for wx in range(x + 12, x + w - 20, 46):
+            d.arc([wx, wy, wx + 30, wy + 12], 180, 360, fill=(220, 235, 245), width=2)
     d.polygon([(x + 30, y + h - 22), (x + 92, y + h - 22), (x + 80, y + h - 8), (x + 42, y + h - 8)],
               fill=(30, 30, 36))
 
@@ -221,34 +249,27 @@ def main():
     ill_bridge(d, M, ly, 430, 258)
     draw_text_block(d, M + 452, ly + 2, W - M - (M + 452), "UKRAINE · RUSSIA",
                     "Ukraine hits Crimea bridge again as Russia strikes Kyiv crossings",
-                    "Kyiv says its forces damaged the Kerch bridge for a second "
-                    "straight day. Russian missiles hit two bridges over the Dnipro "
-                    "in the capital, cutting heat, water and power.",
-                    kicker_size=19, head_size=32, deck_size=22,
-                    max_head_lines=3, max_deck_lines=4)
+                    "Kyiv says the road arch collapsed, blocking shipping; "
+                    "Russia hit Kyiv's two bridges.",
+                    kicker_size=19, head_size=33, deck_size=23,
+                    max_head_lines=3, max_deck_lines=2)
     d.line([M, 404, W - M, 404], fill=RULE, width=2)
 
     # two rows of three stories
     col_w = (W - 2 * M - 2 * 24) // 3
     stories = [
         ("MIDDLE EAST", "Iran fires drones at a US base in Bahrain",
-         "Tehran says it struck a radar site at Sheikh Isa; Bahrain says "
-         "it was intercepted, no casualties.", ill_radar),
+         "Tehran says it hit a US radar; Bahrain says intercepted.", ill_radar),
         ("ASIA · DIPLOMACY", "Xi–Trump–Putin summit confirmed",
-         "China says the leaders meet Thursday in Shenzhen to talk "
-         "nuclear risks, Ukraine and trade.", ill_summit),
+         "Thursday in Shenzhen, a first: nuclear arms and Iran.", ill_summit),
         ("ASIA · SECURITY", "Japan scrambles jets over Russian planes",
-         "Tokyo says two suspected Russian aircraft entered its airspace, "
-         "and it protested.", ill_jets),
+         "First breach since Sept 2024; Tokyo protested to Moscow.", ill_jets),
         ("EUROPE · MIGRATION", "Five states plan a Rwanda migrant hub",
-         "Germany, Denmark, Austria, Greece and the Netherlands plan a "
-         "joint return facility in Rwanda.", ill_globe),
+         "Pilot hub for 100 rejected asylum seekers, from 2027.", ill_globe),
         ("UNITED STATES", "Pentagon fails its audit for a ninth year",
-         "Auditors again cannot verify accounts covering more than $4.8 "
-         "trillion in assets.", ill_pentagon),
+         "Auditors still cannot verify $4.8 trillion in books.", ill_pentagon),
         ("TECHNOLOGY", "US moves to close the AI-chip loophole",
-         "New rules stop China renting US computing power; Microsoft "
-         "blames a latent defect.", ill_chip),
+         "Renting AI compute to China now needs a license.", ill_chip),
     ]
     row_ys = [420, 700]
     for i, (kicker, head, deck, ill) in enumerate(stories):
@@ -257,21 +278,21 @@ def main():
         y = row_ys[row]
         ill(d, x, y, col_w, 108)
         draw_text_block(d, x, y + 118, col_w, kicker, head, deck,
-                        kicker_size=15, head_size=23, deck_size=18,
-                        max_head_lines=2, max_deck_lines=3)
+                        kicker_size=16, head_size=25, deck_size=20,
+                        max_head_lines=2, max_deck_lines=2)
     d.line([M, 968, W - M, 968], fill=RULE, width=2)
 
     # also-today strip
     y = 978
     d.text((M, y), "ALSO TODAY", font=font(SANS_B, 17), fill=RED)
-    items = ("UN: 128 states meet in Geneva on banning killer robots   ·   "
-             "UK sanctions eight firms building West Bank settlements   ·   "
-             "Measles: 13 US babies born with the virus, most cases since 1991")
-    lines = wrap(d, items, font(SANS, 17), W - 2 * M - 130)
+    items = ("UN: 128 states in Geneva weigh binding killer-robot rules   ·   "
+             "UK sanctions eight West Bank settlement firms   ·   "
+             "Measles: US loses elimination status; 13 babies born with it")
+    lines = wrap(d, items, font(SANS, 18), W - 2 * M - 130)
     yy = y - 1
     for ln in lines[:2]:
-        d.text((M + 130, yy), ln, font=font(SANS, 17), fill=(52, 56, 66))
-        yy += 21
+        d.text((M + 130, yy), ln, font=font(SANS, 18), fill=(52, 56, 66))
+        yy += 22
 
     img.save("entry.png", optimize=True)
     print("saved entry.png")
