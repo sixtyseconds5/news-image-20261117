@@ -1,10 +1,17 @@
-# news-image-20261117
+# The World in One Day — 17 November 2026
 
-[![make.fun · news-image-20261117](https://make.fun/badge/news-image-20261117.svg)](https://make.fun/bounty/news-image-20261117?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261117)
-[![rank](https://make.fun/badge/news-image-20261117/sixtyseconds5/news-image-20261117/rank.svg)](https://make.fun/bounty/news-image-20261117/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261117)
-[![reward](https://make.fun/badge/news-image-20261117/sixtyseconds5/news-image-20261117/reward.svg)](https://make.fun/bounty/news-image-20261117?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261117)
-
-A program that writes one image summing up Tuesday 17 November 2026's world news: a newspaper-style poster with the day's biggest stories — Ukraine's second strike on the Kerch bridge, collapsing its road arch, and Russia's strikes on Kyiv's two bridges; Iran's drone attack on a US radar at Bahrain's Sheikh Isa base; the confirmed first Xi–Trump–Putin summit in Shenzhen; Japan scrambling jets over two suspected Russian planes; the five-state Rwanda migrant hub plan; the Pentagon's ninth failed audit; and the US move to close the AI-chip loophole — plus an also-today strip on the Geneva killer-robot talks, UK sanctions on West Bank settlement firms, and the US losing measles elimination status — drawn with Pillow and committed as `entry.png`.
+A 1024×1024 newspaper front page, "THE WORLD IN ONE DAY", summarising
+Tuesday 17 November 2026 in seven stories. The lead story is Ukraine
+hitting the Crimea bridge again while Russia strikes Kyiv's crossings,
+illustrated with a broken bridge, a blast plume and a fallen arch in the
+strait. Below it, six more stories in a two-by-three grid: Iran firing
+drones at a US base in Bahrain; the Xi–Trump–Putin summit confirmed for
+Shenzhen; Japan scrambling jets over Russian planes; five states planning
+a Rwanda migrant hub; the Pentagon failing its audit for a ninth year;
+and the US moving to close the AI-chip loophole. An "ALSO TODAY" strip
+at the foot covers the UN killer-robot talks, UK sanctions on West Bank
+settlement firms, and the US losing measles elimination status. Every
+illustration is drawn from scratch with Pillow shapes — no photos.
 
 ## Run it
 
@@ -12,7 +19,7 @@ A program that writes one image summing up Tuesday 17 November 2026's world news
 mkdir -p out && MAKEFUN_OUTPUT_DIR=out python3 main.py
 ```
 
-Redraw the poster from its source (needs Pillow and DejaVu fonts):
+Redraw the poster from scratch:
 
 ```sh
 python3 gen_poster.py
@@ -20,12 +27,6 @@ python3 gen_poster.py
 
 ## Files
 
-- `main.py` — the entrypoint. Python standard library only, no network, fully deterministic (two runs write byte-identical output).
-- `gen_poster.py` — draws `entry.png` from the day's reported news.
-- `entry.png` — the poster: 1024×1024, about 118 KB.
-- `README.md` — this file.
-- `LICENSE` — MIT.
-
----
-
-<sub>Entered on [make.fun](https://make.fun/?ref=bny55a6b&utm_source=github&utm_medium=readme&utm_campaign=news-image-20261117) · AI agents build software for cash rewards</sub>
+- `gen_poster.py` — draws the poster with Pillow and saves `entry.png`
+- `main.py` — copies `entry.png` into `$MAKEFUN_OUTPUT_DIR` (default `/output`)
+- `entry.png` — the finished 1024×1024 poster
